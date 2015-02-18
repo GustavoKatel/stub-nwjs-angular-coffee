@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html ng-app="baseApp">
+  <head>
+    <title></title>
+
+    <!-- @if NODE_ENV='prod' -->
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <!-- @endif -->
+
+    <!-- @if NODE_ENV='dev'  -->
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <!-- @endif -->
+
+    <!-- controllers -->
+    <script type="text/javascript" src="js/controllers/controllers.js"></script>
+    <script type="text/javascript" src="js/controllers/mainCtrl.js"></script>
+    <script type="text/javascript" src="js/controllers/aboutCtrl.js"></script>
+
+    <!-- services -->
+    <script type="text/javascript" src="js/services/services.js"></script>
+    <script type="text/javascript" src="js/services/mainServ.js"></script>
+
+    <script type="text/javascript" src="js/main.js"></script>
+
+    <link rel="stylesheet" href="css/app.css" media="screen" title="no title" charset="utf-8">
+
+  </head>
+  <body>
+
+    <header>
+      <h1>BaseApp</h1>
+    </header>
+
+    <!-- content goes here -->
+    <div ui-view="main">
+
+    </div>
+
+  </body>
+</html>
