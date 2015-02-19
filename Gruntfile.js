@@ -12,68 +12,60 @@ module.exports = function(grunt) {
   // configure the tasks
   grunt.initConfig({
 
-    pkg: grunt.file.readJSON('package.json'),
+    config: {
 
-    path: {
-      dev: "build/dev",
-      prod: "build/prod"
+      platform: PLATFORM,
+
+      env: "dev",
+
+      pkg: grunt.file.readJSON('package.json'),
+
+      path: {
+        build: "build",
+        dist: "dist",
+        cache: "cache"
+      },
+
+      nwjs: {
+        version: "0.12.0-alpha3"
+      }
+
     },
 
     clean: {
-      dev: {
-        src: [ "build/dev" ]
-      },
-      prod: {
-        src: [ "build/prod" ]
+      build: {
+        src: [ "<%= config.path.build %>/<%= config.env %>" ]
       },
       dist: {
-        src: [ "dist" ]
+        src: [ "<%= config.path.dist %>" ]
       }
     },
 
     coffee: {
-      dev: {
+      build: {
         cwd: 'coffee',
         sourceMap: true,
         expand: true,
         src: ['**/*.coffee'],
-        dest: 'build/dev/js/',
-        ext: '.js'
-      },
-      prod: {
-        cwd: 'coffee',
-        sourceMap: true,
-        expand: true,
-        src: ['**/*.coffee'],
-        dest: 'build/prod/js/',
+        dest: '<%= config.path.build %>/<%= config.env %>/js/',
         ext: '.js'
       }
     },
 
     preprocess: {
-      dev: {
-        src: [ 'build/dev/**/*.html' ],
+      build: {
+        src: [ '<%= config.path.build %>/<%= config.env %>/**/*.html' ],
         options: {
           inline: true,
           context: {
-            NODE_ENV: "dev"
-          }
-        }
-      },
-      prod: {
-        src: [ 'build/prod/**/*.html' ],
-        options: {
-          inline: true,
-          context: {
-            NODE_ENV: "prod"
+            NODE_ENV: "<%= config.env %>"
           }
         }
       }
-
     },
 
     copy: {
-      dev: {
+      build: {
         src: [
           'package.json',
           '*.html',
@@ -84,64 +76,33 @@ module.exports = function(grunt) {
           'fonts/**/*',
           'bower_components/**/*'
         ],
-        dest: 'build/dev/',
-        exand: true
-      },
-      prod: {
-        src: [
-          'package.json',
-          '*.html',
-          'css/**/*',
-          'native/build/Release/*',
-          'templates/**/*',
-          'images/**/*',
-          'fonts/**/*',
-          'bower_components/**/*'
-        ],
-        dest: 'build/prod/',
+        dest: '<%= config.path.build %>/<%= config.env %>/',
         exand: true
       }
     },
 
     run: {
-      app_dev: {
+      build: {
         options: {
           cwd: ".",
           wait: true,
           quiet: false
         },
-        cmd: "nw_bin/nodewebkit/nw",
+        cmd: "<%= config.path.cache %>/<%= config.nwjs.version %>/<%= config.platform %>/nw",
         args: [
-          "build/dev",
-        ]
-      },
-      app_prod: {
-        options: {
-          cwd: ".",
-          wait: true,
-          quiet: false
-        },
-        cmd: "nw_bin/nodewebkit/nw",
-        args: [
-          "build/prod",
+          "<%= config.path.build %>/<%= config.env %>",
         ]
       }
     },
 
     nodewebkit: {
-      dev: {
+      build: {
         options: {
           platforms: ['win', 'osx', 'linux'],
-          buildDir: './dist/dev'
+          buildDir: './<%= config.path.dist %>/<%= config.env %>',
+          version: '<%= config.nwjs.version %>'
         },
-        src: ['./build/dev/**/*']
-      },
-      prod: {
-        options: {
-          platforms: ['win', 'osx', 'linux'],
-          buildDir: './dist/prod'
-        },
-        src: ['./build/prod/**/*']
+        src: ['./<%= config.path.build %>/<%= config.env %>/**/*']
       }
     }
 
@@ -162,25 +123,28 @@ module.exports = function(grunt) {
     if(env!='dev' && env!='prod') {
       env = 'dev';
     }
-    grunt.task.run('clean:'+env);
-    grunt.task.run('coffee:'+env);
-    grunt.task.run('copy:'+env);
-    grunt.task.run('preprocess:'+env);
+    grunt.config.set("config.env", env);
+    grunt.task.run('clean:build');
+    grunt.task.run('coffee:build');
+    grunt.task.run('copy:build');
+    grunt.task.run('preprocess:build');
   });
 
   grunt.registerTask('app', function(env){
     if(env!='dev' && env!='prod') {
       env = 'dev';
     }
-    grunt.task.run('run:app_'+env);
+    grunt.config.set("config.env", env);
+    grunt.task.run('run:build');
   });
 
   grunt.task.registerTask('dist', function(env){
     if(env!='dev' && env!='prod') {
       env = 'dev';
     }
+    grunt.config.set("config.env", env);
     grunt.task.run('build:'+env);
-    grunt.task.run('nodewebkit:'+env);
+    grunt.task.run('nodewebkit:build');
   });
 
 };
