@@ -1,5 +1,7 @@
 # stub-nwjs-angular-coffee
 
+[![Dependency Status](https://gemnasium.com/GustavoKatel/stub-nwjs-angular-coffee.svg)](https://gemnasium.com/GustavoKatel/stub-nwjs-angular-coffee)
+
 Package "ready-to-go" to develop applications in [NW.js](http://nwjs.io/), [Angular.JS](http://angularjs.org/) and [CoffeeScript](http://coffeescript.org/).
 
 ## Features
