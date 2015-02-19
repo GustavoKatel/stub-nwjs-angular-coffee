@@ -3,7 +3,6 @@ angular.module 'baseApp', ['baseApp.controllers', 'baseApp.services', 'ui.router
 
 .run ($window, mainServ) ->
   console.log "ready!"
-  mainServ.init
 
 
 .config ($stateProvider, $urlRouterProvider) ->

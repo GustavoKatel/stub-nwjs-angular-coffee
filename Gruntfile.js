@@ -12,6 +12,13 @@ module.exports = function(grunt) {
   // configure the tasks
   grunt.initConfig({
 
+    pkg: grunt.file.readJSON('package.json'),
+
+    path: {
+      dev: "build/dev",
+      prod: "build/prod"
+    },
+
     clean: {
       dev: {
         src: [ "build/dev" ]
@@ -119,6 +126,23 @@ module.exports = function(grunt) {
           "build/prod",
         ]
       }
+    },
+
+    nodewebkit: {
+      dev: {
+        options: {
+          platforms: ['win', 'osx', 'linux'],
+          buildDir: './dist/dev'
+        },
+        src: ['./build/dev/**/*']
+      },
+      prod: {
+        options: {
+          platforms: ['win', 'osx', 'linux'],
+          buildDir: './dist/prod'
+        },
+        src: ['./build/prod/**/*']
+      }
     }
 
   });
@@ -130,6 +154,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-preprocess');
   grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-node-webkit-builder');
 
   // define the tasks
 
@@ -150,10 +175,12 @@ module.exports = function(grunt) {
     grunt.task.run('run:app_'+env);
   });
 
-  grunt.task.registerTask('dist', function(){
-    grunt.task.run('copy:dist');
-    grunt.task.run('compress:dist');
-    grunt.task.run('run:dist-'+PLATFORM);
+  grunt.task.registerTask('dist', function(env){
+    if(env!='dev' && env!='prod') {
+      env = 'dev';
+    }
+    grunt.task.run('build:'+env);
+    grunt.task.run('nodewebkit:'+env);
   });
 
 };

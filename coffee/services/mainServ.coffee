@@ -3,10 +3,7 @@ angular.module("baseApp.services")
 .factory "mainServ", [ "$window", ($window) ->
   new class mainServ
     constructor: ->
-      $window.customVar = "arroz"
-      console.log "services ok!"
+      # code here!
 
-    init: ->
-      console.log "mainServ init!"
 
 ]
