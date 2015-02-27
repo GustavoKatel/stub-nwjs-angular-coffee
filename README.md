@@ -16,10 +16,10 @@ Package "ready-to-go" to develop applications in [NW.js](http://nwjs.io/), [Angu
 
 ## How to
 
-* Install dependencies: `bower install` and `npm install`
-* Build `grunt build[:env]`.
-* Create dist packages `grunt dist[:env]`.
-* Run `grunt app[:env]`.
+1. Install dependencies: `bower install` and `npm install`
+2. Build `grunt build[:env]`.
+3. Create dist packages `grunt dist[:env]`.
+4. Run `grunt app[:env]`.
 
 Possible values to `env` are *dev* and *prod*
 
